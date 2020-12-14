@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org"
+	xmlns:tiles="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Collapsible sidebar using Bootstrap 4</title>
+<link rel="shortcut icon" href="/webapp/static/images/favicon.gif"></link>
+
+<!-- Bootstrap Core CSS -->
+<link href="/webapp/static/css/bootstrap.min.css" rel="stylesheet"></link>
+<!-- MetisMenu CSS -->
+<link href="/webapp/static/css/metisMenu.min.css" rel="stylesheet"></link>
+<!-- Custom CSS -->
+<link href="/webapp/static/css/sb-admin-2.css" rel="stylesheet"></link>
+
+<!-- json-viewer -->
+<link href="/webapp/static/css/json-viewer.css" rel="stylesheet"></link>
+
+<!-- confirm -->
+<link href="/webapp/static/css/jquery-confirm.css" rel="stylesheet"></link>
+<link href="/webapp/static/css/jquery-confirm.min.css" rel="stylesheet"></link>
+
+<!-- additional CSS -->
+<link href="/webapp/static/css/common.css" rel="stylesheet"></link>
+
+<!-- jQuery -->
+<script src="/webapp/static/js/jquery.min.js"></script>
+
+<!-- include BlockUI -->
+<script src="/webapp/static/js/jquery.blockUI.js"></script>
+<!-- confirm -->
+<script src="/webapp/static/js/jquery-confirm.js"></script>
+<script src="/webapp/static/js/jquery-confirm.min.js"></script>
+</head>
+
+<body>
+	<div id="wrapper">
+		<!-- Navigation -->
+		<nav class="navbar navbar-default navbar-static-top" role="navigation"
+			style="margin-bottom: 0">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#" style="padding-top: 0px;"> <img
+					src='/webapp/static/img/skb_btv.png'></img></a>
+			</div>
+			<div class="navbar-default sidebar" role="navigation">
+				<div class="sidebar-nav navbar-collapse">
+					<ul class="nav" id="side-menu">
+						<li>
+							<a href="#"><i class="fa fa-refresh fa-fw"></i> SMD 배포 </a>
+							<ul class="nav nav-second-level">
+								<li><a href="/deploy/smd"> War배포 </a></li>
+								<li><a href="/deploy/smdif"> 인터페이스 확인 </a></li>
+							</ul>
+						</li>
+						<li>
+							<a href="/deploy/rps"><i class="fa fa-refresh fa-fw"></i> RPS 배포 </a>
+						</li>
+						<li>
+							<a href="/deploy/wepg"><i class="fa fa-refresh fa-fw"></i> WEPG 배포 </a>
+						</li>
+						<li>
+							<a href="/deploy/pss"><i class="fa fa-refresh fa-fw"></i> PSS 배포 </a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<div id="page-wrapper" class="container">
+			<div tiles:replace="content">some prototyping markup over
+				here1...</div>
+		</div>
+
+	</div>
+	<script src="/webapp/static/js/bootstrap.min.js"></script>
+
+	<!-- Metis Menu Plugin JavaScript -->
+	<script src="/webapp/static/js/metisMenu.min.js"></script>
+
+	<!-- Custom Theme JavaScript -->
+	<script src="/webapp/static/js/sb-admin-2.js"></script>
+
+	<!-- json-viewer -->
+	<script src="/webapp/static/js/json-viewer.js"></script>
+
+	<!-- operation -->
+	<script src="/webapp/static/js/common.js"></script>
+
+	<!-- network -->
+	<script src="/webapp/static/js/network.js"></script>
+	<script src="/webapp/static/common/loading.js"></script>
+	<script type="text/javascript">
+		
+	</script>
+</body>
+</html>

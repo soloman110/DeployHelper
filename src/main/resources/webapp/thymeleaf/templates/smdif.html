@@ -1,0 +1,499 @@
+<style>
+#smdif small {color:#418253}
+h3 {
+	color: #229922;
+	padding: 0;
+	margin: 0;
+}
+
+.jsonTextarea {
+    margin-right: 20px;
+    width: 100%;
+    height: 70vh;
+    outline: none;
+    padding: 5px;
+}
+        
+input, select{
+    width: 60%;
+}
+span {
+	font-family: Consolas;
+}
+#smdif ul {
+	font-size: 0.9em;
+	border: 1px solid #4caf59;
+	background-color: #f2f2f2;
+	padding: 0 3px 0 30px;
+}
+#smdif li {
+	display: block;
+	width: 100%;
+	/*border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;*/
+	border-bottom: 1px solid #ddd;
+	padding: 20px;
+}
+#smdif li.top {
+	border-top: 1px solid #ddd;
+}
+#smdif li b {
+	display: inline-block;
+	min-width: 160px;
+	border-right: 1px solid #ddd;
+	padding-right: 3px;
+}
+#smdif li span {
+	display: inline-block;
+	padding-right: 3px;
+}
+#smdif li a {
+	border-right: 1px solid #ddd;
+	display: inline-block;
+	padding-left: 3px;
+	width: 314px;
+}
+#smdif li a.head {
+	font-weight: bold;
+}
+#smdif li button {
+	width:80px;
+	margin-right:5px;
+}
+#smdif .red {
+	color: red;
+}
+.container {
+	position: absolute;
+	z-index: 3;
+	
+	background-color: #FFF;
+	width:70%;
+}
+#link {
+	position: fixed;
+	top: 40px;
+	left: 400px;
+}
+#link a {
+	border: 1px solid #aaa;
+	border-radius: 4px;
+	text-decoration: none;
+	padding: 2px;
+	color: #229922;
+}
+#link a:hover {
+	background-color: #AAA;
+	text-decoration: none;
+	color: #FFF;
+}
+.inline-h3 {
+	float: left;
+    margin-right: 10px;
+}
+.jsonPre {
+    width: 100%;
+    height: 70vh;
+    outline: 1px solid #ccc;
+    padding: 5px;
+    overflow: scroll;
+    margin-top:2px;
+}
+.string {
+    color: green;
+}
+
+.number {
+    color: darkorange;
+}
+
+.boolean {
+    color: blue;
+}
+
+.null {
+    color: magenta;
+}
+
+.key {
+    color: red;
+}
+</style>
+
+<div id="smdif" class="row" style="margin-left:20px; margin-top:20px" layout:fragment="content">
+	<select class="form-control text-center" name="type" id="server_select">	
+		<option th:each="server : ${servers.serverList}" th:value="${server.ip}" th:text="${server.name}"></option>
+	</select>
+	<h2 style="color:#229922;">SmartDelivery API list</h2>
+		<ul id="indexPage">
+			<li>
+				<h3><i>IF-SMTDV-V5-001</i> <small>(잔여 쿠폰/,B포인트 정보+신규 이벤트 쿠폰/B포인트 등록여부+신규/만료 쿠폰/B포인트 리스트알림 .)</small></h3><br/>
+				<b><span>stb_id</span></b> <input type="text" value="{F481E3A7-DCC3-11DE-ACF0-AB20203CAC17}"/><br/>
+				<b><span>mac_address</span></b> <input type="text" value="e1:f8:48:30:5c:3d"/>
+				<button class="req" id="u001">조회</button>
+			</li>
+			<li>
+				<h3><i>IF-SMTDV-V5-201</i> <small>(잔여 쿠폰/,B포인트, B캐쉬 정보 + 신규 이벤트 쿠폰/B포인트, B캐쉬 등록여부 + 신규/만료 쿠폰/B포인트, B캐쉬 리스트 알림.)</small></h3><br/>
+				<b><span>stb_id</span></b> <input type="text" value="{6C04522C-46B8-11E9-B4BF-A911074387AC}"/><br/>
+				<b><span>mac_address</span></b> <input type="text" value="e1:f8:48:30:5c:3d"/>
+				<button class="req" id="u201">조회</button>
+			</li>
+			
+			<li id="002" hmethod="post">
+				<h3><i>IF-SMTDV-V5-002</i> <small>(신규 이벤트 쿠폰/B포인트 비활성화 (뱃지).)</small></h3><br/>
+				<button class="req" id="u002">POST요청</button>
+				<button class="edit">Data 편집</button>
+				<button class="format">Format</button>
+			</li>
+			<li id="202" hmethod="post">
+				<h3><i>IF-SMTDV-V5-202</i> <small>(신규 이벤트 쿠폰, point, B캐쉬 뱃지 비활성화 정보 전달)</small></h3><br/>
+				<button class="req" id="u202">POST요청</button>
+				<button class="edit">Data 편집</button>
+				<button class="format">Format</button>
+			</li>
+			<li id="003" hmethod="post">
+				<h3><i>IF-SMTDV-V5-003</i> <small>(신규/만료 쿠폰/B포인트 리스트 알림 전달 확인 )</small></h3>
+				<button class="req" id="u003">POST요청</button>
+				<button class="edit">Data 편집</button>
+				<button class="format">Format</button>
+			</li>
+			<li id="203" hmethod="post">
+				<h3><i>IF-SMTDV-V5-203</i> <small>(신규/만료 쿠폰/B포인트/B캐쉬 리스트 알림 전달 확인)</small></h3>
+				<button class="req" id="u203">POST요청</button>
+				<button class="edit">Data 편집</button>
+				<button class="format">Format</button>
+			</li>
+			<li>
+				<h3><i>IF-SMTDV-V5-004</i> <small>(BTV 평점 등록 ( like_action = 0, 미평가상태, 1 좋아요, 2 별루예요.)</small></h3><br/>
+				<b><span>stb_id</span></b> <input type="text" value="{F481E3A7-DCC3-11DE-ACF0-AB20203CAC17}"/><br/>
+				<b><span>mac_address</span></b> <input type="text" value="e1:f8:48:30:5c:3d"/><br/>
+				<b><span>series_id</span></b> <input type="text" value="CS01124239"/><br/>
+				<b><span>like_action</span></b> <input type="text" value="2"/><br/>
+				<b><span>title</span></b> <input type="text" value="하하하하"/>
+				<button class="req" id="u004">조회</button>
+			</li>
+			<li>
+				<h3><i>IF-SMTDV-V5-005</i> <small>(BTV 평점 조회.)</small></h3><br/>
+				<b><span>stb_id</span></b> <input type="text" value="{F481E3A7-DCC3-11DE-ACF0-AB20203CAC17}"/><br/>
+				<b><span>mac_address</span></b> <input type="text" value="e1:f8:48:30:5c:3d"/><br/>
+				<b><span>series_id</span></b> <input type="text" value="CS01124239"/><br/>
+				<b><span class="select_span">total_yn</span></b>
+				<select name="total_yn" class="selInsp">
+					<option></option>
+				    <option>N</option>
+				    <option>Y</option>
+				</select>
+				<button class="req" id="u005">조회</button>
+			</li>
+			<li>
+				<h3><i>IF-SMTDV-V5-006</i> <small>(모바일 BTV 다중 컨텐츠 평가하기 정보 조회)</small></h3><br/>
+				<b><span>stb_id</span></b> <input type="text" value="{F481E3A7-DCC3-11DE-ACF0-AB20203CAC17}"/><br/>
+				<b><span>mac_address</span></b> <input type="text" value="e1:f8:48:30:5c:3d"/><br/>
+				<b><span>series_id_lst</span></b> <input type="text" value="CS01124239,CS01004430,CS01105822,CS01018448,TEST"/>
+				<button class="req" id="u006">조회</button>
+			</li>
+		</ul>
+</div>
+
+<script type="text/javascript"  th:inline="javascript">
+/*<![CDATA[*/
+
+$(function() {
+	var rootPath = "/delivery/UI5/sd-ui5service";
+	var u001 = rootPath + "?IF=IF-SMTDV-V5-001&m=getCouponsPointInfo&ver=0.1&version_sw=3.3.144";
+	var u201 = rootPath + "?IF=IF-SMTDV-V5-201&m=getCouponsPointInfoExt&ver=0.1&version_sw=3.3.144";
+	var u002 = rootPath + "?IF=IF-SMTDV-V5-002&m=disableBadge";
+	var u202 = rootPath + "?IF=IF-SMTDV-V5-202&m=disableBadgeExt";
+	var u003 = rootPath + "?IF=IF-SMTDV-V5-003&m=CoponPointReceiveConfirm"
+	var u203 = rootPath + "?IF=IF-SMTDV-V5-203&m=CoponPointReceiveConfirmExt"
+	var u004 = rootPath + "?IF=IF-SMTDV-V5-004&m=registerLikeHate&ver=0.1&version_sw=3.3.144";	
+	var u005 = rootPath + "?IF=IF-SMTDV-V5-005&m=getLikeHate&version_sw=3.3.144";
+	var u006 = rootPath + "?IF=IF-SMTDV-V5-006&m=getLikeHateMulti&version_sw=3.3.144";
+	
+	//변수 명명규칙 == request button id + 'data';  edit 버튼의 callballk사용 
+	var u002data = {
+			  "IF": "IF-SMTDV-V5-002",
+			  "m": "disableBadge",
+			  "stb_id": "{F481E3A7-DCC3-11DE-ACF0-AB20203CAC17}",
+			  "mac_address": "bbbb",
+			  "version_sw": "bbbbb",
+			  "data" : {
+				  "coupons_new": [
+				        {
+				            "coupon_id": "00000000000027633631",
+				            "coupon_name": "상담원 - 채널팩전체 DOG + 플레이보이",
+				            "apply_date": "20180511",
+				            "expire_date": "99991231",
+				            "coupon_flag": "1"
+				        },
+				        {
+				            "coupon_id": "00000000000027633632",
+				            "coupon_name": "상담원 - 채널팩전체 DOG + 플레이보이",
+				            "apply_date": "20180511",
+				            "expire_date": "99991231",
+				            "coupon_flag": "1"
+				        }
+				    ],
+				    "points_new": [
+				        {
+				            "point_id": "00000000000011407993",
+				            "point_name": "170214_속도테스트_5만",
+				            "apply_date": "20180329",
+				            "expire_date": "99991231",
+				            "point_flag": "1"
+				        }
+				    ]
+			  }
+		 }; 
+
+	var u202data = {
+			  "IF": "IF-SMTDV-V5-202",
+			  "m": "disableBadgeExt",
+			  "stb_id": "{6C04522C-46B8-11E9-B4BF-A911074387AC}",
+			  "mac_address": "bbbb",
+			  "version_sw": "bbbbb",
+			  "data" : {
+				  "cash_new": [
+				        {
+				            "cash_id": "00000000000011818578",
+				            "cash_name": "구매판촉 300 포인트",
+				            "apply_date": "20201019",
+				            "expire_date": "20251117",
+				            "cash_flag": "1"
+				        }
+				    ],
+				    "coupons_new": [
+				        {
+				            "coupon_id": "00000000000028990380",
+				            "coupon_name": "520 금액정액권 테스트",
+				            "apply_date": "20201019",
+				            "expire_date": "99991231",
+				            "coupon_flag": "1"
+				        },
+				        {
+				            "coupon_id": "00000000000029042835",
+				            "coupon_name": "VCS 520 PPM test",
+				            "apply_date": "20201016",
+				            "expire_date": "99991231",
+				            "coupon_flag": "1"
+				        }
+				    ],
+				    "points_new": [
+				        {
+				            "point_id": "00000000000011818578",
+				            "point_name": "구매판촉 300 포인트",
+				            "apply_date": "20201019",
+				            "expire_date": "20251127",
+				            "point_flag": "1"
+				        }
+				    ]
+			  }
+		 };
+	 
+	var u003data = {
+			  "IF": "IF-SMTDV-V5-003",
+			  "m": "CoponPointReceiveConfirm",
+			  "stb_id": "{F481E3A7-DCC3-11DE-ACF0-AB20203CAC17}",
+			  "mac_address": "bbbb",
+			  "version_sw": "bbbbb",
+			  "data" : {
+				  "coupons": [
+				        {
+				            "coupon_id": "00000000000027604077",
+				            "coupon_name": "맛보기 VOD PPM 100%",
+				            "apply_date": "20180129",
+				            "expire_date": "99991231",
+				            "coupon_flag": "1"
+				        }
+				    ],
+				    "points": [
+				        {
+				            "point_id": "00000000000011407467",
+				            "point_name": "170116_TEST_인증번호발급",
+				            "apply_date": "20180329",
+				            "expire_date": "99991231",
+				            "point_flag": "1"
+				        }
+				    ]
+			  }
+	 }; 
+	 
+	var u203data = {
+			  "IF": "IF-SMTDV-V5-203",
+			  "m": "CoponPointReceiveConfirmExt",
+			  "stb_id": "{6C04522C-46B8-11E9-B4BF-A911074387AC}",
+			  "mac_address": "bbbb",
+			  "version_sw": "bbbbb",
+			  "data" : {
+				  "coupons": [
+						{
+							"coupon_id": "00000000000028990380",
+							"coupon_name": "520 금액정액권 테스트",
+							"apply_date": "20201019",
+							"expire_date": "99991231",
+							"coupon_flag": "1"
+						},
+						{
+							"coupon_id": "00000000000029042835",
+							"coupon_name": "VCS 520 PPM test",
+							"apply_date": "20201016",
+							"expire_date": "99991231",
+							"coupon_flag": "1"
+						}
+				    ],
+				    "points": [
+				        {
+				            "point_id": "00000000000011818578",
+				            "point_name": "구매판촉 300 포인트",
+				            "apply_date": "20201019",
+				            "expire_date": "99991231",
+				            "point_flag": "2"
+				        }
+				    ],
+					"cash": [
+				        {
+				            "cash_id": "00000000000011818578",
+				            "cash_name": "구매판촉 300 포인트",
+				            "apply_date": "20201019",
+				            "expire_date": "20251018",
+				            "cash_flag": "1"
+				        }
+				    ]
+			  }
+	};
+		
+	function doPost(url, data) {
+		 
+		var xhr = new XMLHttpRequest();
+		xhr.withCredentials = true;
+		
+		xhr.addEventListener("readystatechange", function () {
+		  if (this.readyState === 4) {
+		    alert(this.responseText);
+		  }
+		});
+		xhr.open("POST", url, true); //POST방식, URL주소와 비동기,
+		xhr.setRequestHeader("Content-type", "application/json");
+		xhr.send( JSON.stringify(data) );
+	 }
+	 
+	function isList(json) {
+		return  (typeof json == 'object' ) && (json instanceof Array)
+	}
+	
+	$(".edit").click(function(){
+		$jsonTextarea = $(this).parent().find('.jsonTextarea');
+		var urlname = $(this).parent().find('.req').attr("id");
+		var data = "";
+		eval("data = " + urlname + "data");
+		
+		if(!$jsonTextarea.length > 0) { //table 생성 
+			$(this).parent().append(createJsonEditor(data));
+			$(this).addClass("hideable").html("저장");
+		} else if ($(this).hasClass("hideable")) {
+			alert("OK");
+			$(this).parent().find(".jsonTextarea").hide();
+			$(this).addClass("showable").removeClass("hideable").html("Data 편집");
+		} else if ($(this).hasClass("showable")) {
+			$(this).parent().find(".jsonTextarea").show();
+			$(this).addClass("hideable").removeClass("showable").html("저장");
+		}
+	});	
+	$(".format").click(function(el) {
+		var pre = $(this).parent().find(".jsonTextarea");
+		var str = $(this).parent().find(".jsonTextarea").val();
+		try {
+			pre.val(parse1(str));
+		} catch(err) {
+			alert("JSON Format Error");
+		}
+		
+	});
+	$("#indexPage li .req").click(function() {
+		url = build_url(this);
+		if($(this).parent().attr("hmethod") == "post") {
+			var jsonstr = $(this).parent().find('.jsonTextarea').val();
+			var jsonobj;
+			try {
+				jsonobj = JSON.parse(jsonstr);
+			} catch(err) {
+				alert("JSON Format Error");
+				return;
+			}
+			//doPost(url, jsonobj);
+			alert("미 구현");
+		} else {
+			window.open(url, "_blank");
+		}
+	})
+	function createJsonEditor(data) {
+		var prediv = $("<textarea contenteditable=true class='jsonTextarea'></textarea>");
+		$(prediv).val(parse1(JSON.stringify(data)));
+		return prediv;
+	}
+	
+	function parse1(str) {
+        return JSON.stringify(JSON.parse(str), null, 2);
+    }
+	//현재 사용하지 않음.
+	function parse2(str) {
+        str = JSON.stringify(JSON.parse(str), null, 2);
+        str = str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+        return str.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    }
+	
+	function build_url(btn_el) {
+		var urlname = $(btn_el).attr("id"); //button의 id
+		var span = $(btn_el).parent().find("span:not(.select_span)");
+		var pathvariable = $(span[1]).text();
+		var vals = $(btn_el).parent().find("input");
+		
+		var url = "";
+		eval("url = " + urlname + "");
+		
+		var apiRoot = $("#server_select").children('option:selected').val();
+		
+		if($(btn_el).parent().attr("hmethod") == "post") {
+			return "http://" + apiRoot + ":8080"  + url;
+		} else {
+			for (var i=0 ; i < span.length; i++) {
+				if($(vals[i]).val()) {
+					if($(span[i]).text()  == "stb_id") { // std_id에서 특수문자 "{ }"가포함되어있어서 ecode한다. 
+						url = url + "&" + $(span[i]).text() + "=" + encodeURI($(vals[i]).val());
+					} else {
+						url = url + "&" + $(span[i]).text() + "=" + $(vals[i]).val();				
+					}
+				}
+			}
+			var select_spans = $(btn_el).parent().find("span.select_span");
+			$(select_spans).each(function(i,e) {
+				var col = $(e).text();
+				var select_val = $(e).parent().nextAll('select').first().val();
+				if(select_val) {
+					url = url + "&" + col + "=" + select_val;	
+				}
+			});
+			//return url;
+			return "http://" + apiRoot + ":8080"  + url;
+		}
+	}
+});
+/*]]>*/
+</script>

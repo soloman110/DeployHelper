@@ -1,0 +1,42 @@
+spring:
+  profiles:
+    active: dev
+  thymeleaf:
+    mode: LEGACYHTML5
+---
+security:
+  user:
+    name: admin
+    password: admin
+file:
+  upload-dir: /svc/deploy/uploads
+
+  
+spring.thymeleaf.encoding: UTF-8
+spring.thymeleaf.cache: false
+
+spring.http.multipart.maxFileSize: 20MB
+spring.http.multipart.maxRequestSize: 20MB
+
+projects:
+  - name: smd
+    user: svc
+    password: imsi$svc
+    warpath: /svc/smtdv-se/was/tomcat-7.0.55/webapps
+    warbackuppath: /svc/smtdv-se/was/tomcat-7.0.55/backup
+    commands: |
+      /svc/smtdv-se/was/tomcat-7.0.55/bin/shutdown.sh
+      sleep 5000
+      rm -r /svc/smtdv-se/was/tomcat-7.0.55/webapps/delivery#UI5
+      /svc/smtdv-se/was/tomcat-7.0.55/bin/startup.sh
+    serverList:
+    - {
+      ip: 10.211.55.11,
+      group: VM-SMD-WAS-성수,
+      name: VM-SMD-WAS-01
+    }
+    - {
+      ip: 10.211.55.10,
+      group: VM-SMD-WAS-성수,
+      name: VM-SMD-WAS-02
+    }

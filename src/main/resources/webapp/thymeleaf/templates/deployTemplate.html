@@ -1,0 +1,316 @@
+<style>
+.right span {
+	margin: 20px
+}
+
+h4 {
+	margin-bottom: 10px;
+}
+
+.anyClass {
+	height: 150px;
+	overflow-y: scroll;
+}
+
+#accordion {
+	height: 650px;
+}
+</style>
+<div class="row" style="margin-left: 20px; margin-top: 20px">
+	<script type="text/javascript"  th:inline="javascript">
+		$(document).ready(function() {
+			var loading = new KZ_Loading({time: 30000});
+			
+			//서버에서 Project Name를 받아온다!!!
+			var project = [[${project}]];
+			//1. SFTP를 전송하는 클릭 이벤트 등록 
+			$("#uploadbutton").click(function() {
+				var servers = getSelectedServers();
+				if(servers.length == 0) {
+					alert("서버 선택하세요..");
+					return;
+				}
+				loading.show();
+				var remote_path = $("#dest").val();
+				var form = new FormData();
+				form.append("file", $("#file")[0].files[0]);
+				form.append("remoteBaseDir", remote_path);
+				form.append("servers", JSON.stringify(servers));
+				form.append("project", project);
+				$.ajax({
+					type : "post",//필수 
+					url : "/deploy/sftp",
+					async : true,
+					enctype : "multipart/form-data",
+					contentType : false,
+					processData : false,
+					data : form,
+					success : function(data) {
+						loading.hide();
+						if (data == "ok") {
+							alert("업로드됨");
+						} else {
+							alert("실패: " + data);
+						}
+						$("#file").val("");
+						var file = $("#file");
+						file.after(file.clone());
+						file.remove();
+					},
+					error : function(e) {
+						loading.hide();
+						alert("실패했음");
+					}
+				});
+			});
+			//2. 명령실행. 
+			$("#execute").click(function() {
+				var commands = $("#commands").val();
+				var servers = getSelectedServers();
+				if(servers.length == 0) {
+					alert("서버 선택하세요..");
+					return;
+				}
+				loading.show();
+				$.ajax({
+					type : "post",//필수 
+					url : "/deploy/command",
+					async : true,
+					contentType : false,
+					processData : false,
+					contentType : "application/json",
+					data : JSON.stringify({
+						"commands" : commands,
+						"servers" : servers,
+						"project": project
+					}),
+					success : function(data) {
+						loading.hide();
+						if (data == "ok") {
+							alert("Complete");
+						} else {
+							alert("실패했다..." + data);
+						}
+					},
+					error : function(e) {
+						loading.hide();
+						alert("실패했음");
+					}
+				});
+				
+			});
+			//3 server table 생성
+			createServerList();
+			//4.백업 
+			$("#backupbtn").click(function() {
+				var toBackupFile = $("#toBackupFile").val();
+				var backupPath = $("#backupPath").val();
+				var backupFileName = $("#backupFileName").val();
+				var servers = getSelectedServers();
+				var commands = "cp " + toBackupFile + "   " + backupPath + "/" + backupFileName;
+				if(servers.length == 0) {
+					alert("서버 선택하세요..");
+					return;
+				}
+				loading.show();
+				$.ajax({
+					type : "post",//필수 
+					url : "/deploy/command",
+					async : true,
+					contentType : false,
+					processData : false,
+					contentType : "application/json",
+					data : JSON.stringify({
+						"commands" : commands,
+						"servers" : servers,
+						"project" : project
+					}),
+					success : function(data) {
+						loading.hide();
+						if (data == "ok") {
+							alert("Complete");
+						} else {
+							alert("실패했다..." + data);
+						}
+					},
+					error : function(e) {
+						loading.hide();
+						alert("실패했음");
+					}
+				});
+			});
+		});
+
+		function getFileRealPath(id) {
+			var url = null;
+			var fileObj = document.getElementById(id).files[0];
+			if (window.createObjcectURL != undefined) {
+				url = window.createOjcectURL(fileObj);
+			} else if (window.URL != undefined) {
+				url = window.URL.createObjectURL(fileObj);
+			} else if (window.webkitURL != undefined) {
+				url = window.webkitURL.createObjectURL(fileObj);
+			}
+			return url;
+		}
+		function createServerList(projectname) {
+			var projectInfo = [[${servers}]];
+			var serverlist = projectInfo.serverList;
+			var infos = {};
+			for ( var index in serverlist) {
+				var server = serverlist[index];
+				var group = server.group;
+				if (!infos[group]) {
+					var aa = [];
+					aa.push(server);
+					infos[group] = aa;
+				} else {
+					var aa = infos[group];
+					aa.push(server);
+					infos[group] = aa;
+				}
+			}
+			var panelid = 0;
+			for ( var group in infos) {
+				var $table = createTable(panelid + "pid", group,
+						infos[group]);
+				panelid = panelid + 1;
+				$(".panel-group").append($table);
+			}
+		}
+		function getSelectedServers() {
+			var chk_value = [];
+			$('input[name="chk"]:checked').each(function() {
+				chk_value.push($(this).parent().data("json"));
+			});
+			return chk_value;
+		}
+		//折叠功能。
+		function createTable(panelid, title, json, depth) {
+
+			var $panel = $('<div class="panel panel-default"></div>');
+			var $panelHead = $('<div class="panel-heading"></div>');
+			var $caption = $('<thead><tr><th style="text-align:center" data-field="github.name"><div class="th-inner ">'
+					+ title
+					+ '</div><div class="fht-cell"></div></th></tr></thead>');
+
+			$a = $('<h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#' + panelid +'">'
+					+ title + '</a></h4>');
+			$panelHead.append($a);
+			//$panelHead.append($caption);
+
+			var $collapse = $('<div class="panel-collapse collapse in" id="' + panelid + '"></div>');
+			var $panelBody = $('<div class="panel-body"></div>');
+
+			var $table = $('<table class="table table-bordered table-hover table-condensed"></table>');
+			var $tbody = $('<tbody></tbody>');
+			for ( var i in json) {
+				var $tr = $('<tr></tr>');
+				var $td = $('<td class="row"></td>');
+
+				var $leftDiv = $('<div class="left col-md-2"><input name="chk" type="checkbox"></input></div>');
+				$td.append($leftDiv);
+				$leftDiv.data("json", json[i]);
+
+				if (typeof json[i] == 'object') {
+					if (depth > 2) {
+						continue;
+					}
+					var $rightDiv = $('<div class="right col-md-10"></div>');
+					var ip = $('<span class="serverip">' + json[i].ip
+							+ '</span>');
+					var name = $('<span class="servername">' + json[i].name
+							+ '</span>');
+					$rightDiv.append(ip);
+					$rightDiv.append(name);
+					$td.append($rightDiv);
+				}
+				$tr.append($td);
+				$tbody.append($tr);
+			}
+			$table.append($tbody);
+			$panelBody.append($table);
+			$collapse.append($panelBody);
+			$panel.append($panelHead);
+			$panel.append($collapse);
+			return $panel;
+
+		}
+	</script>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div id="content">
+				<div class="panel-group col-md-6 anyClass" id="accordion"></div>
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">파일 백업</div>
+						<div class="panel-body">
+							<form class="form-horizontal" role="form">
+								<div class="form-group">
+									<label for="firstname" class="col-sm-2 control-label">파일 위치</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="toBackupFile" th:value="${servers.warpath}  + '/delivery#UI5.war'"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="firstname" class="col-sm-2 control-label">백업 폴드</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="backupPath" th:value="${servers.warbackuppath}"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="firstname" class="col-sm-2 control-label">파일 명</label>
+									<div class="col-sm-5">
+										<input type="text" class="form-control" id="backupFileName" value="delivery#UI5.war.20201201"/>
+									</div>
+								</div>
+								<div class="form-group">
+								    <div class="col-sm-offset-2 col-sm-10">
+								      <input type="button" value="백업" id="backupbtn"></input>
+								    </div>
+							  	</div>
+							</form>
+						</div>
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">파일 업로드</div>
+						<div class="panel-body">
+							<form class="form-horizontal" role="form" id="fileuploadForm" method="POST" enctype="multipart/form-data">
+								<div class="form-group">
+									<div class="col-sm-10">
+										<input id="file" type="file" name="file"/> 
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label">파일 위치</label>
+									<div class="col-sm-10">
+										<input id="dest" class="form-control" type="text" th:value="${servers.warpath}"></input>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-2 ">
+								      <input  type="button" value="SFTP" id="uploadbutton"></input>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">Remote command편집 및 실행</div>
+						<div class="panel-body">
+							<form role="form">
+								<div class="form-group">
+									<textarea class="form-control" rows="10" id="commands" th:text="${servers.commands}"></textarea>
+								</div>
+								<div class="form-group">
+									<input type="button" value="실행" id="execute"></input>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

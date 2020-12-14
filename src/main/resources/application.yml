@@ -1,0 +1,303 @@
+spring:
+  profiles:
+    active: dev
+---
+security:
+  user:
+    name: admin
+    password: admin
+file:
+  upload-dir: /svc/deploy/uploads
+
+logging:
+  level.root: info
+
+spring.thymeleaf.mode: LEGACYHTML5
+spring.thymeleaf.encoding: UTF-8
+spring.thymeleaf.cache: false
+
+spring.http.multipart.maxFileSize: 20MB
+spring.http.multipart.maxRequestSize: 20MB
+
+projects:
+  - name: smd
+    user: svc
+    password: imsi$svc,
+    warpath: /svc/smtdv-se/was/tomcat-7.0.55/webapps
+    warbackuppath: /svc/smtdv-se/was/tomcat-7.0.55/backup
+    commands: |
+      /svc/smtdv-se/was/tomcat-7.0.55/bin/shutdown.sh
+      sleep 5000
+      rm -r /svc/smtdv-se/was/tomcat-7.0.55/webapps/delivery#UI5
+      /svc/smtdv-se/was/tomcat-7.0.55/bin/startup.sh
+    serverList:
+      - {
+        ip: 1.255.46.39,
+        group: VM-SMD-WAS-성수,
+        name: VM-SMD-WAS-01
+      }
+      - {
+        ip: 1.255.46.40,
+        group: VM-SMD-WAS-성수,
+        name: VM-SMD-WAS-02
+      }
+      - {
+        ip: 1.255.46.41,
+        group: VM-SMD-WAS-성수,
+        name: VM-SMD-WAS-03
+      }
+      - {
+        ip: 1.255.46.42,
+        group: VM-SMD-WAS-성수,
+        name: VM-SMD-WAS-04
+      }
+      - {
+        ip: 1.255.46.43,
+        group: VM-SMD-WAS-성수,
+        name: VM-SMD-WAS-05
+      }
+      - {
+        ip: 1.255.46.66,
+        group: VM-SMD-WAS-성수,
+        name: VM-SMD-WAS-06
+      }
+      - {
+        ip: 1.255.46.67,
+        group: VM-SMD-WAS-성수,
+        name: VM-SMD-WAS-07
+      }
+      - {
+        ip: 1.255.115.71,
+        group: VM-SMD-WAS-성수3,
+        name: VM-SMD-WAS-3-01
+      }
+      - {
+        ip: 1.255.115.72,
+        group: VM-SMD-WAS-성수3,
+        name: VM-SMD-WAS-3-02
+      }
+      - {
+        ip: 1.255.115.73,
+        group: VM-SMD-WAS-성수3,
+        name: VM-SMD-WAS-3-03
+      }
+      - {
+        ip: 1.255.115.74,
+        group: VM-SMD-WAS-성수3,
+        name: VM-SMD-WAS-3-04
+      }
+      - {
+        ip: 1.255.115.75,
+        group: VM-SMD-WAS-성수3,
+        name: VM-SMD-WAS-3-05
+      }
+      - {
+        ip: 1.255.115.76,
+        group: VM-SMD-WAS-성수3,
+        name: VM-SMD-WAS-3-06
+      }
+      - {
+        ip: 1.255.115.77,
+        group: VM-SMD-WAS-성수3,
+        name: VM-SMD-WAS-3-07
+      }
+      - {
+        ip: 123.213.185.159,
+        group: VM-SMD-WAS-성수5,
+        name: VM-SMD-WAS-5-01
+      }
+      - {
+        ip: 123.213.185.160,
+        group: VM-SMD-WAS-성수5,
+        name: VM-SMD-WAS-5-02
+      }
+      - {
+        ip: 123.213.185.161,
+        group: VM-SMD-WAS-성수5,
+        name: VM-SMD-WAS-5-03
+      }
+      - {
+        ip: 123.213.185.162,
+        group: VM-SMD-WAS-성수5,
+        name: VM-SMD-WAS-5-04
+      }
+      - {
+        ip: 123.213.185.163,
+        group: VM-SMD-WAS-성수5,
+        name: VM-SMD-WAS-5-05
+      }
+      - {
+        ip: 123.213.185.164,
+        group: VM-SMD-WAS-성수5,
+        name: VM-SMD-WAS-5-06
+      }
+      - {
+        ip: 123.213.185.165,
+        group: VM-SMD-WAS-성수5,
+        name: VM-SMD-WAS-5-07
+      }
+      - {
+        ip: 1.255.141.146,
+        group: VM-SMD-WAS-수유2,
+        name: VM-SMD-WAS-2-01
+      }
+      - {
+        ip: 1.255.141.147,
+        group: VM-SMD-WAS-수유2,
+        name: VM-SMD-WAS-2-02
+      }
+      - {
+        ip: 1.255.141.148,
+        group: VM-SMD-WAS-수유2,
+        name: VM-SMD-WAS-2-03
+      }
+      - {
+        ip: 1.255.141.149,
+        group: VM-SMD-WAS-수유2,
+        name: VM-SMD-WAS-2-04
+      }
+      - {
+        ip: 1.255.141.150,
+        group: VM-SMD-WAS-수유2,
+        name: VM-SMD-WAS-2-05
+      }
+      - {
+        ip: 1.255.141.151,
+        group: VM-SMD-WAS-수유2,
+        name: VM-SMD-WAS-2-06
+      }
+      - {
+        ip: 1.255.141.152,
+        group: VM-SMD-WAS-수유2,
+        name: VM-SMD-WAS-2-07
+      } 
+      - {
+        ip: 1.255.231.101,
+        group: VM-SMD-WAS-수유4,
+        name: VM-SMD-WAS-4-01
+      }
+      - {
+        ip: 1.255.231.102,
+        group: VM-SMD-WAS-수유4,
+        name: VM-SMD-WAS-4-02
+      }
+      - {
+        ip: 1.255.231.103,
+        group: VM-SMD-WAS-수유4,
+        name: VM-SMD-WAS-4-03
+      }
+      - {
+        ip: 1.255.231.104,
+        group: VM-SMD-WAS-수유4,
+        name: VM-SMD-WAS-4-04
+      }
+      - {
+        ip: 1.255.231.105,
+        group: VM-SMD-WAS-수유4,
+        name: VM-SMD-WAS-4-05
+      }
+      - {
+        ip: 1.255.231.106,
+        group: VM-SMD-WAS-수유4,
+        name: VM-SMD-WAS-4-06
+      }
+      - {
+        ip: 1.255.231.107,
+        group: VM-SMD-WAS-수유4,
+        name: VM-SMD-WAS-4-07
+      }
+      - {
+        ip: 1.255.113.111,
+        group: VM-SMD-WAS-수유6,
+        name: VM-SMD-WAS-6-01
+      }
+      - {
+        ip: 1.255.113.112,
+        group: VM-SMD-WAS-수유6,
+        name: VM-SMD-WAS-6-02
+      }
+      - {
+        ip: 1.255.113.113,
+        group: VM-SMD-WAS-수유6,
+        name: VM-SMD-WAS-6-03
+      }
+      - {
+        ip: 1.255.113.114,
+        group: VM-SMD-WAS-수유6,
+        name: VM-SMD-WAS-6-04
+      }
+      - {
+        ip: 1.255.113.115,
+        group: VM-SMD-WAS-수유6,
+        name: VM-SMD-WAS-6-05
+      }
+      - {
+        ip: 1.255.113.116,
+        group: VM-SMD-WAS-수유6,
+        name: VM-SMD-WAS-6-06
+      }
+      - {
+        ip: 1.255.113.117,
+        group: VM-SMD-WAS-수유6,
+        name: VM-SMD-WAS-6-07
+      }
+  - name: rps
+    user: svc
+    password: imsi$svc,
+    warpath: /svc/smtdv-se/was/tomcat-7.0.55/webapps
+    warbackuppath: /svc/smtdv-se/was/tomcat-7.0.55/backup
+    commands: |
+      /svc/smtdv-se/was/tomcat-7.0.55/bin/shutdown.sh
+      rm -r /svc/smtdv-se/was/tomcat-7.0.55/webapps/delivery#UI5
+      /svc/smtdv-se/was/tomcat-7.0.55/bin/startup.sh
+    serverList:
+      - {
+        ip: 1.255.46.39,
+        group: VM-SMD-WAS-성수,
+        name: VM-SMD-WAS-01
+      }
+      - {
+        ip: 1.255.46.40,
+        group: VM-SMD-WAS-성수,
+        name: VM-SMD-WAS-02
+      }
+  - name: wepg
+    user: svc
+    password: imsi$svc,
+    warpath: /svc/smtdv-se/was/tomcat-7.0.55/webapps
+    warbackuppath: /svc/smtdv-se/was/tomcat-7.0.55/backup
+    commands: |
+      /svc/smtdv-se/was/tomcat-7.0.55/bin/shutdown.sh
+      rm -r /svc/smtdv-se/was/tomcat-7.0.55/webapps/delivery#UI5
+      /svc/smtdv-se/was/tomcat-7.0.55/bin/startup.sh
+    serverList:
+      - {
+        ip: localhost,
+        group: VM-RPS-WAS-성수,
+        name: VM-RPS-WAS-01
+      }
+      - {
+        ip: localhost,
+        group: VM-RPS-WAS-성수,
+        name: VM-RPS-WAS-02
+      }
+  - name: pss
+    user: svc
+    password: application.yml에서 수정하세요
+    warpath: application.yml에서 수정하세요
+    warbackuppath: application.yml에서 수정하세요
+    commands: |
+      /svc/smtdv-se/was/tomcat-7.0.55/bin/shutdown.sh
+      rm -r /svc/smtdv-se/was/tomcat-7.0.55/webapps/delivery#UI5
+      /svc/smtdv-se/was/tomcat-7.0.55/bin/startup.sh
+    serverList:
+      - {
+        ip: localhost,
+        group: VM-PSS-WAS-성수,
+        name: VM-PSS-WAS-01
+      }
+      - {
+        ip: localhost,
+        group: VM-PSS-WAS-성수,
+        name: VM-PSS-WAS-02
+      }
